@@ -1,5 +1,6 @@
 import unittest
 import merkle_tree
+from merkle_tree import MerkleTree
 
 # tree with 4 leaves: hello1, hello2, hello3, hello4
 # example generated using https://xorbin.com/tools/sha256-hash-calculator?utm_content=cmp-true
@@ -212,6 +213,25 @@ class TestMerkleTree(unittest.TestCase):
     #     result = merkle_tree.verify_proof(value, index, proof, root)
     #     self.assertFalse(result)
 
+
+class TestMerkleTreeVisualization(unittest.TestCase):
+
+    def test_visualize_merkle_tree(self):
+        # Create a list of values to construct the Merkle Tree
+        values = ['hello1', 'hello2', 'hello3', 'hello4']
+
+        # Initialize the Merkle Tree with the values
+        merkle_tree = MerkleTree(values)
+
+        # Generate visualization
+        # This will save the visualization file and optionally open it
+        merkle_tree.visualize('test_visualize_merkle_tree')
+
+        # Since visualization is more about generating an output file and viewing it
+        # rather than asserting conditions, this test might not use assert statements.
+        # However, you could assert the existence of the output file as a minimal test.
+        import os
+        self.assertTrue(os.path.exists('test_visualize_merkle_tree.pdf'))
 
 if __name__ == '__main__':
     unittest.main()

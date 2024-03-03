@@ -1,6 +1,7 @@
 import hashlib
 import math
 
+from graphviz import Digraph
 
 def hash(m: str) -> str:
     '''
@@ -210,3 +211,36 @@ class MerkleTree:
         to_print.reverse()
         for level in to_print:
             print(level)
+
+
+
+
+
+
+
+
+    def visualize(self, filename='merkle_tree'):
+        dot = Digraph(comment='Merkle Tree')
+
+        def add_nodes_edges(node):
+            if node is None:
+                return
+            # Check if the node's value needs to be truncated
+            label = str(node.value)[:16] + "..." if len(node.value) > 16 else str(node.value)
+            # Add the current node with the updated label
+            dot.node(name=str(id(node)), label=label)
+            # Recursively add left child
+            if node.left:
+                dot.edge(str(id(node)), str(id(node.left)))
+                add_nodes_edges(node.left)
+            # Recursively add right child
+            if node.right:
+                dot.edge(str(id(node)), str(id(node.right)))
+                add_nodes_edges(node.right)
+
+        add_nodes_edges(self.root)
+        dot.render(filename, format='pdf', view=False)  # Explicitly specify the format and don't open automatically
+        try:
+            dot.render(filename, view=false)  # Save and open the rendered graph
+        except Exception as e:
+            print(f"Error generating visualization: {e}")
